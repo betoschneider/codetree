@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>CodeTree</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/api.js" defer></script>
+    <script src="/js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <span class="brand">CodeTree</span>
+      <button
+        id="theme-toggle"
+        class="icon-button tooltip"
+        type="button"
+        aria-label="Alternar tema"
+        data-tooltip="Alternar tema"
+      >
+        <svg class="icon theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+        <svg class="icon theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path
+            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+          ></path>
+        </svg>
+      </button>
+    </header>
+
+    <main class="layout">
+      <section class="column" aria-labelledby="editor-label">
+        <div class="tabs" role="tablist" aria-label="Tipo de estrutura">
+          <button
+            id="tab-tree"
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="editor-panel"
+            data-tab="tree"
+          >
+            Árvore
+          </button>
+          <button
+            id="tab-timeline"
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="editor-panel"
+            data-tab="timeline"
+          >
+            Linha do Tempo
+          </button>
+        </div>
+
+        <div id="editor-panel" class="editor" role="tabpanel" aria-labelledby="tab-tree">
+          <label id="editor-label" for="input">Estrutura de pastas</label>
+
+          <fieldset id="mode-row" class="mode-row">
+            <legend class="sr-only">Modo de entrada</legend>
+            <label><input type="radio" name="tree-mode" value="auto" checked /> Auto</label>
+            <label><input type="radio" name="tree-mode" value="indentation" /> Indentação</label>
+            <label><input type="radio" name="tree-mode" value="paths" /> Caminhos</label>
+          </fieldset>
+
+          <textarea
+            id="input"
+            class="input"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            aria-describedby="hint"
+          ></textarea>
+
+          <p id="hint" class="hint"></p>
+          <pre id="example" class="example" aria-hidden="true"></pre>
+        </div>
+      </section>
+
+      <section class="column" aria-labelledby="output-title">
+        <div class="output-head">
+          <h2 id="output-title" class="section-title">Visualização</h2>
+          <div class="output-actions">
+            <button
+              id="copy"
+              class="icon-button tooltip"
+              type="button"
+              aria-label="Copiar"
+              data-tooltip="Copiar"
+            >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="11" rx="2.5"></rect>
+                <path d="M6 15H5.5A2.5 2.5 0 0 1 3 12.5v-7A2.5 2.5 0 0 1 5.5 3h7A2.5 2.5 0 0 1 15 5.5V6"></path>
+              </svg>
+            </button>
+            <button
+              id="download"
+              class="icon-button tooltip"
+              type="button"
+              aria-label="Baixar TXT"
+              data-tooltip="Baixar TXT"
+            >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v11"></path>
+                <path d="m7.5 10 4.5 4.5L16.5 10"></path>
+                <path d="M5 20h14"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <pre id="output" class="output" aria-live="polite" aria-atomic="true"></pre>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Desenvolvido por
+      <a href="https://betoschneider.com" target="_blank" rel="noopener noreferrer"
+        >Beto Schneider</a
+      >
+    </footer>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </body>
+</html>

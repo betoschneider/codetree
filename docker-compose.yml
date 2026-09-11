@@ -1,0 +1,30 @@
+services:
+  codetree:
+    build: .
+    image: codetree:latest
+    ports:
+      - "8530:8530"
+    environment:
+      CODETREE_ENV: production
+      CODETREE_HOST: 0.0.0.0
+      CODETREE_PORT: "8530"
+      CODETREE_REQUEST_TIMEOUT: "2"
+      CODETREE_MAX_BODY_BYTES: "65536"
+      CODETREE_RATE_LIMIT: "120"
+      CODETREE_RATE_BURST: "20"
+      CODETREE_RATE_WINDOW: "60"
+      CODETREE_LIMIT_CONCURRENCY: "32"
+      CODETREE_LIMIT_MAX_REQUESTS: "10000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
+    restart: unless-stopped
