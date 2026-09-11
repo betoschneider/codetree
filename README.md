@@ -62,37 +62,29 @@ A primeira linha é a raiz. Duas formas de informar a hierarquia:
 **Caminhos** (prefixo `/`, intermediários criados automaticamente):
 
 ```text
-notebooks
-/config/ambiente
-/bronze/notebook 1
-/bronze/notebook 2
-/silver/notebook 1
-/gold/notebook 1
+projeto
+/src/componentes
+/docs/guia
 ```
 
 **Indentação** (qualquer largura de recuo; 1 espaço por nível é o mais simples):
 
 ```text
-notebooks
- config
-  ambiente
- bronze
-  notebook 1
+projeto
+ src
+  componentes
+ docs
+  guia
 ```
 
 Ambas produzem a mesma saída (a ordem de inserção é preservada):
 
 ```text
-notebooks
-├── config
-│   └── ambiente
-├── bronze
-│   ├── notebook 1
-│   └── notebook 2
-├── silver
-│   └── notebook 1
-└── gold
-    └── notebook 1
+projeto
+├── src
+│   └── componentes
+└── docs
+    └── guia
 ```
 
 > Regras: duplicados são mesclados; tabs equivalem a 4 espaços; linhas em
@@ -107,27 +99,21 @@ notebooks
 - O **último** evento recebe `●`; os demais, `○`.
 
 ```text
-13/08 | Alteração da origem do atributo
+01/03 | Início do projeto
+  - Planejamento
 
-02/09 | Adequação do ALTER TABLE
-  - Truncate
-  - Recarga da tabela
-
-04/09 | Reinício da Identity
-  - Truncate
-  - Reset da Identity
+15/03 | Primeira entrega
+  - Revisão
+  - Publicação
 ```
 
 ```text
-○ 13/08 ───── Alteração da origem do atributo
+○ 01/03 ───── Início do projeto
+│             └── Planejamento
 │
-○ 02/09 ───── Adequação do ALTER TABLE
-│             ├── Truncate
-│             └── Recarga da tabela
-│
-● 04/09 ───── Reinício da Identity
-              ├── Truncate
-              └── Reset da Identity
+● 15/03 ───── Primeira entrega
+              ├── Revisão
+              └── Publicação
 ```
 
 ---
