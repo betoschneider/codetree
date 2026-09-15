@@ -7,7 +7,5 @@ __pycache__/
 .git/
 .gitignore
 tests/
-codetree-plano-implementacao.md
-projeto.md
 Dockerfile
 docker-compose.yml

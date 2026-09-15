@@ -1,4 +1,4 @@
-from codetree.sanitize import clean_text
+from treegen.sanitize import clean_text
 
 
 def test_normaliza_quebras_windows_e_mac():

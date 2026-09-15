@@ -1,4 +1,4 @@
-"""Aplicação FastAPI do CodeTree."""
+"""Aplicação FastAPI do TreeGen."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from .security import (
 from .services.timeline import build_timeline
 from .services.tree import build_tree
 
-logger = logging.getLogger("codetree")
+logger = logging.getLogger("treegen")
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -45,14 +45,14 @@ def create_app(limits: Limits | None = None, env: str | None = None) -> FastAPI:
 
     if is_production:
         app = FastAPI(
-            title="CodeTree",
+            title="TreeGen",
             version="0.1.0",
             docs_url=None,
             redoc_url=None,
             openapi_url=None,
         )
     else:
-        app = FastAPI(title="CodeTree", version="0.1.0")
+        app = FastAPI(title="TreeGen", version="0.1.0")
 
     # Ordem: o primeiro `add_middleware` fica mais interno.
     app.add_middleware(TimeoutMiddleware, seconds=limits.request_timeout_seconds)

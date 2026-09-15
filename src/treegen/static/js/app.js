@@ -2,21 +2,21 @@
   "use strict";
 
   var DEBOUNCE_MS = 150;
-  var THEME_KEY = "codetree-theme";
+  var THEME_KEY = "treegen-theme";
 
   var CONTENT = {
     tree: {
       label: "Estrutura de pastas",
       hint: "Uma linha por pasta. Na indentação, use espaços para indicar o nível; nos caminhos, use / para separar os níveis.",
       example: "projeto\n src\n  componentes\n docs\n  guia",
-      file: "codetree-arvore.txt",
+      file: "treegen-arvore.txt",
     },
     timeline: {
       label: "Eventos da linha do tempo",
       hint: "Uma linha com data (dd/mm) é um evento; linhas iniciadas por - são subitens do evento anterior.",
       example:
         "01/03 | Início do projeto\n  - Planejamento\n\n15/03 | Primeira entrega\n  - Revisão\n  - Publicação",
-      file: "codetree-timeline.txt",
+      file: "treegen-timeline.txt",
     },
   };
 
@@ -69,8 +69,8 @@
     var id = ++requestId;
     var request =
       currentTab === "tree"
-        ? CodeTreeApi.generateTree(text, currentMode())
-        : CodeTreeApi.generateTimeline(text);
+        ? TreeGenApi.generateTree(text, currentMode())
+        : TreeGenApi.generateTimeline(text);
 
     request
       .then(function (data) {

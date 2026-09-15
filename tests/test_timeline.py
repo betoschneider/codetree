@@ -1,7 +1,7 @@
 import pytest
 
-from codetree.errors import InputError, LimitError
-from codetree.services.timeline import build_timeline
+from treegen.errors import InputError, LimitError
+from treegen.services.timeline import build_timeline
 
 TIMELINE_INPUT = """13/08 | Alteração da origem do atributo
 

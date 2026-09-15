@@ -1,4 +1,6 @@
-# CodeTree
+# TreeGen
+
+*Hierarquia sem complicação.*
 
 Aplicação web **stateless** que gera, a partir de texto simples, **estruturas
 de pastas** (tree) e **linhas do tempo** (timeline) com caracteres
@@ -9,9 +11,6 @@ Unicode/ASCII — `├`, `└`, `│`, `─`, `○`, `●` — com **preview em 
 - **Frontend:** HTML + CSS + JavaScript puro, servido pelo próprio FastAPI
 - **Sem banco de dados:** processamento 100% em memória; nada do usuário é
   persistido, e nenhum conteúdo enviado é registrado em log
-
-O plano completo de implementação está em
-[`codetree-plano-implementacao.md`](codetree-plano-implementacao.md).
 
 ---
 
@@ -191,23 +190,23 @@ curl -s -X POST http://127.0.0.1:8530/api/timeline \
 
 ## Configuração
 
-Tudo é configurável por variáveis de ambiente `CODETREE_*` (ver
-`src/codetree/config.py`):
+Tudo é configurável por variáveis de ambiente `TREEGEN_*` (ver
+`src/treegen/config.py`):
 
 | Variável | Padrão | Descrição |
 |----------|--------|-----------|
-| `CODETREE_HOST` | `127.0.0.1` | Endereço de escuta |
-| `CODETREE_PORT` | `8530` | Porta |
-| `CODETREE_ENV` | `development` | `production` desabilita `/docs`, `/redoc` e `/openapi.json` |
-| `CODETREE_REQUEST_TIMEOUT` | `2` | Timeout de processamento (s) |
-| `CODETREE_MAX_BODY_BYTES` | `65536` | Tamanho máximo do corpo |
-| `CODETREE_RATE_LIMIT` | `120` | Requisições por janela, por IP |
-| `CODETREE_RATE_BURST` | `20` | Burst adicional |
-| `CODETREE_RATE_WINDOW` | `60` | Janela do rate limit (s) |
-| `CODETREE_LIMIT_CONCURRENCY` | `32` | Concorrência máxima (uvicorn) |
-| `CODETREE_TIMEOUT_KEEP_ALIVE` | `10` | Keep-alive (uvicorn) |
-| `CODETREE_LIMIT_MAX_REQUESTS` | `10000` | Reciclagem de worker (uvicorn) |
-| `CODETREE_FORWARDED_ALLOW_IPS` | `127.0.0.1` | Proxies confiáveis para `X-Forwarded-For` |
+| `TREEGEN_HOST` | `127.0.0.1` | Endereço de escuta |
+| `TREEGEN_PORT` | `8530` | Porta |
+| `TREEGEN_ENV` | `development` | `production` desabilita `/docs`, `/redoc` e `/openapi.json` |
+| `TREEGEN_REQUEST_TIMEOUT` | `2` | Timeout de processamento (s) |
+| `TREEGEN_MAX_BODY_BYTES` | `65536` | Tamanho máximo do corpo |
+| `TREEGEN_RATE_LIMIT` | `120` | Requisições por janela, por IP |
+| `TREEGEN_RATE_BURST` | `20` | Burst adicional |
+| `TREEGEN_RATE_WINDOW` | `60` | Janela do rate limit (s) |
+| `TREEGEN_LIMIT_CONCURRENCY` | `32` | Concorrência máxima (uvicorn) |
+| `TREEGEN_TIMEOUT_KEEP_ALIVE` | `10` | Keep-alive (uvicorn) |
+| `TREEGEN_LIMIT_MAX_REQUESTS` | `10000` | Reciclagem de worker (uvicorn) |
+| `TREEGEN_FORWARDED_ALLOW_IPS` | `127.0.0.1` | Proxies confiáveis para `X-Forwarded-For` |
 
 ---
 
@@ -215,7 +214,7 @@ Tudo é configurável por variáveis de ambiente `CODETREE_*` (ver
 
 ```bash
 uv sync                  # cria o .venv e instala as dependências
-uv run codetree          # http://127.0.0.1:8530
+uv run treegen          # http://127.0.0.1:8530
 ```
 
 ---
@@ -245,7 +244,7 @@ O `Dockerfile` é multi-stage (build com a imagem do `uv`, runtime enxuto) e o
 - `read_only: true` + `tmpfs` em `/tmp`;
 - `cap_drop: [ALL]` e `security_opt: no-new-privileges:true`;
 - limites de CPU (`1.0`) e memória (`256M`);
-- `CODETREE_ENV=production` (docs desabilitadas);
+- `TREEGEN_ENV=production` (docs desabilitadas);
 - `HEALTHCHECK` em `/api/health` (fica `healthy`).
 
 ---
@@ -271,14 +270,15 @@ O `Dockerfile` é multi-stage (build com a imagem do `uv`, runtime enxuto) e o
 ## Estrutura do projeto
 
 ```text
-codetree/
+treegen/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── pyproject.toml
 ├── uv.lock
-├── codetree-plano-implementacao.md
+├── LICENSE
+├── .dockerignore
 ├── src/
-│   └── codetree/
+│   └── treegen/
 │       ├── __init__.py        # entrypoint (uvicorn)
 │       ├── main.py            # app FastAPI (rotas, static, erros)
 │       ├── config.py          # limites e ambiente

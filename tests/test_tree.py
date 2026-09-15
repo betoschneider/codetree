@@ -1,7 +1,7 @@
 import pytest
 
-from codetree.errors import InputError, LimitError
-from codetree.services.tree import build_tree
+from treegen.errors import InputError, LimitError
+from treegen.services.tree import build_tree
 
 PATHS_INPUT = """notebooks
 /config/ambiente

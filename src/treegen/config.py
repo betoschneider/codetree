@@ -1,7 +1,7 @@
 """Configuração e limites carregados do ambiente.
 
 Limites de entrada (§6.4) e de disponibilidade (§6.5) do plano. Todos podem
-ser sobrescritos por variáveis de ambiente ``CODETREE_*``.
+ser sobrescritos por variáveis de ambiente ``TREEGEN_*``.
 """
 
 from __future__ import annotations
@@ -38,14 +38,14 @@ def _float(name: str, default: float) -> float:
 def load_limits() -> Limits:
     """Monta os limites a partir do ambiente (com defaults seguros)."""
     return Limits(
-        max_body_bytes=_int("CODETREE_MAX_BODY_BYTES", 64 * 1024),
-        request_timeout_seconds=_float("CODETREE_REQUEST_TIMEOUT", 2.0),
-        rate_limit=_int("CODETREE_RATE_LIMIT", 120),
-        rate_burst=_int("CODETREE_RATE_BURST", 20),
-        rate_window_seconds=_float("CODETREE_RATE_WINDOW", 60.0),
+        max_body_bytes=_int("TREEGEN_MAX_BODY_BYTES", 64 * 1024),
+        request_timeout_seconds=_float("TREEGEN_REQUEST_TIMEOUT", 2.0),
+        rate_limit=_int("TREEGEN_RATE_LIMIT", 120),
+        rate_burst=_int("TREEGEN_RATE_BURST", 20),
+        rate_window_seconds=_float("TREEGEN_RATE_WINDOW", 60.0),
     )
 
 
 def current_environment() -> str:
     """Ambiente atual: ``production`` desabilita docs e afins."""
-    return os.environ.get("CODETREE_ENV", "development").strip().lower()
+    return os.environ.get("TREEGEN_ENV", "development").strip().lower()

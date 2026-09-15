@@ -58,7 +58,7 @@
       });
   }
 
-  global.CodeTreeApi = {
+  global.TreeGenApi = {
     generateTree: function (text, mode) {
       return postJson("/api/tree", { text: text, mode: mode });
     },

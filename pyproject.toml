@@ -1,5 +1,5 @@
 [project]
-name = "codetree"
+name = "treegen"
 version = "0.1.0"
 description = "Gerador de estruturas Unicode/ASCII (tree e timeline)"
 readme = "README.md"
@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-codetree = "codetree:main"
+treegen = "treegen:main"
 
 [dependency-groups]
 dev = [

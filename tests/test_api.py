@@ -7,9 +7,9 @@ from starlette.requests import Request
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
-from codetree.config import Limits
-from codetree.main import create_app
-from codetree.security import TimeoutMiddleware
+from treegen.config import Limits
+from treegen.main import create_app
+from treegen.security import TimeoutMiddleware
 
 TREE_TEXT = "notebooks\n/config/ambiente"
 

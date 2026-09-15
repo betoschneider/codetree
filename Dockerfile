@@ -23,9 +23,9 @@ FROM python:3.12-slim-bookworm AS runtime
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PATH="/app/.venv/bin:$PATH" \
-    CODETREE_HOST=0.0.0.0 \
-    CODETREE_PORT=8530 \
-    CODETREE_ENV=production
+    TREEGEN_HOST=0.0.0.0 \
+    TREEGEN_PORT=8530 \
+    TREEGEN_ENV=production
 
 WORKDIR /app
 
@@ -43,4 +43,4 @@ EXPOSE 8530
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8530/api/health').read()"]
 
-CMD ["codetree"]
+CMD ["treegen"]
