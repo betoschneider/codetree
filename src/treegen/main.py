@@ -7,10 +7,11 @@ from collections.abc import Callable
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.types import ASGIApp
 
-from .config import Limits, current_environment, load_limits
+from .config import Limits, configured_root_path, current_environment, load_limits
 from .errors import InputError, LimitError
 from .schemas import ResultResponse, TimelineRequest, TreeRequest
 from .security import (
@@ -92,4 +93,40 @@ def create_app(limits: Limits | None = None, env: str | None = None) -> FastAPI:
     return app
 
 
-app = create_app()
+def create_asgi_app(
+    limits: Limits | None = None,
+    env: str | None = None,
+    root_path: str | None = None,
+) -> ASGIApp:
+    """Cria a aplicação, opcionalmente acessível também sob um prefixo.
+
+    Serve para quando o proxy encaminha o caminho completo (ex.: Cloudflare
+    entregando ``/treegen/...``). A raiz continua funcionando, então a mesma
+    imagem atende subdomínio e subcaminho.
+    """
+    app = create_app(limits=limits, env=env)
+    prefix = (configured_root_path() if root_path is None else root_path).strip("/")
+    if not prefix:
+        return app
+
+    outer = FastAPI(
+        title="TreeGen",
+        version="0.1.0",
+        docs_url=None,
+        redoc_url=None,
+        openapi_url=None,
+    )
+
+    @outer.get(f"/{prefix}")
+    async def _redirect_to_prefix() -> RedirectResponse:
+        """Leva ``/prefixo`` para ``/prefixo/`` (senão os caminhos relativos quebram)."""
+        return RedirectResponse(url=f"/{prefix}/", status_code=307)
+
+    # O prefixo vem antes para casar exatamente; "/" é o fallback.
+    outer.mount(f"/{prefix}", app)
+    outer.mount("/", app)
+    outer.add_middleware(SecurityHeadersMiddleware, cache_no_store_prefix="/api/")
+    return outer
+
+
+app = create_asgi_app()

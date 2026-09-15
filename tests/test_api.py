@@ -8,7 +8,7 @@ from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
 from treegen.config import Limits
-from treegen.main import create_app
+from treegen.main import create_app, create_asgi_app
 from treegen.security import TimeoutMiddleware
 
 TREE_TEXT = "notebooks\n/config/ambiente"
@@ -152,8 +152,47 @@ def test_assets_estaticos_servidos():
 
 def test_index_referencia_os_assets():
     body = make_client().get("/").text
-    assert "/css/style.css" in body
-    assert "/js/app.js" in body
+    # Caminhos relativos: funcionam tanto na raiz quanto sob um prefixo.
+    assert 'href="css/style.css"' in body
+    assert 'src="js/app.js"' in body
+    assert 'href="/css/' not in body
+    assert 'src="/js/' not in body
+
+
+def test_prefixo_monta_em_treegen_e_mantem_a_raiz():
+    client = TestClient(create_asgi_app(env="development", root_path="/treegen"))
+
+    assert client.get("/treegen/api/health").status_code == 200
+    assert client.get("/treegen/").status_code == 200
+    assert client.get("/treegen/css/style.css").status_code == 200
+    assert client.get("/treegen/js/app.js").status_code == 200
+
+    # A raiz continua atendida pela mesma aplicação.
+    assert client.get("/api/health").status_code == 200
+    assert client.get("/").status_code == 200
+
+    response = client.post("/treegen/api/tree", json={"text": "raiz\n/a"})
+    assert response.status_code == 200
+    assert response.json() == {"result": "raiz\n└── a"}
+
+
+def test_prefixo_ausente_quando_nao_configurado():
+    client = TestClient(create_asgi_app(env="development", root_path=""))
+    assert client.get("/api/health").status_code == 200
+    assert client.get("/treegen/api/health").status_code == 404
+
+
+def test_prefixo_sem_barra_final_redireciona():
+    client = TestClient(create_asgi_app(env="development", root_path="/treegen"))
+    response = client.get("/treegen", follow_redirects=False)
+    assert response.status_code in (307, 308)
+    assert response.headers["location"].endswith("/treegen/")
+
+
+def test_prefixo_aplica_headers_de_seguranca():
+    client = TestClient(create_asgi_app(env="development", root_path="/treegen"))
+    response = client.get("/treegen/api/health")
+    assert response.headers["x-content-type-options"] == "nosniff"
 
 
 def test_timeout_retorna_503():

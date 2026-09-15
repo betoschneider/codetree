@@ -60,10 +60,10 @@
 
   global.TreeGenApi = {
     generateTree: function (text, mode) {
-      return postJson("/api/tree", { text: text, mode: mode });
+      return postJson("api/tree", { text: text, mode: mode });
     },
     generateTimeline: function (text) {
-      return postJson("/api/timeline", { text: text });
+      return postJson("api/timeline", { text: text });
     },
   };
 })(window);

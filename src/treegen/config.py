@@ -49,3 +49,8 @@ def load_limits() -> Limits:
 def current_environment() -> str:
     """Ambiente atual: ``production`` desabilita docs e afins."""
     return os.environ.get("TREEGEN_ENV", "development").strip().lower()
+
+
+def configured_root_path() -> str:
+    """Prefixo opcional de montagem (ex.: ``/treegen``); vazio = raiz."""
+    return os.environ.get("TREEGEN_ROOT_PATH", "").strip()

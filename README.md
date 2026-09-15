@@ -197,6 +197,7 @@ Tudo é configurável por variáveis de ambiente `TREEGEN_*` (ver
 |----------|--------|-----------|
 | `TREEGEN_HOST` | `127.0.0.1` | Endereço de escuta |
 | `TREEGEN_PORT` | `8530` | Porta |
+| `TREEGEN_ROOT_PATH` | (vazio) | Prefixo quando o proxy encaminha o caminho completo (ex.: `/treegen`) |
 | `TREEGEN_ENV` | `development` | `production` desabilita `/docs`, `/redoc` e `/openapi.json` |
 | `TREEGEN_REQUEST_TIMEOUT` | `2` | Timeout de processamento (s) |
 | `TREEGEN_MAX_BODY_BYTES` | `65536` | Tamanho máximo do corpo |
@@ -222,7 +223,7 @@ uv run treegen          # http://127.0.0.1:8530
 ## Testes e lint
 
 ```bash
-uv run pytest            # 58 testes
+uv run pytest            # 62 testes
 uv run ruff check .      # lint
 ```
 
@@ -246,6 +247,32 @@ O `Dockerfile` é multi-stage (build com a imagem do `uv`, runtime enxuto) e o
 - limites de CPU (`1.0`) e memória (`256M`);
 - `TREEGEN_ENV=production` (docs desabilitadas);
 - `HEALTHCHECK` em `/api/health` (fica `healthy`).
+
+---
+
+## Deploy em subcaminho (ex.: `/treegen`)
+
+Quando o proxy encaminha o **caminho completo** para a aplicação — o app recebe
+`/treegen/api/health` em vez de `/api/health` — informe o prefixo:
+
+```bash
+TREEGEN_ROOT_PATH=/treegen uv run treegen
+```
+
+No `docker-compose.yml`, defina a mesma variável de ambiente.
+
+Comportamento:
+
+- `.../treegen/` funciona, e `.../treegen` responde `307` para `.../treegen/`;
+- **a raiz continua funcionando** (`https://treegen.exemplo.com/`), então a
+  mesma imagem atende subdomínio **e** subcaminho;
+- o frontend não precisa de configuração: assets e chamadas de API usam
+  caminhos **relativos**;
+- se o proxy **remove** o prefixo antes de encaminhar, basta deixar
+  `TREEGEN_ROOT_PATH` vazio.
+
+> Use sempre a barra final (`/treegen/`): sem ela, os caminhos relativos
+> resolveriam um nível acima.
 
 ---
 

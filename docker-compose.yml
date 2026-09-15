@@ -8,6 +8,8 @@ services:
       TREEGEN_ENV: production
       TREEGEN_HOST: 0.0.0.0
       TREEGEN_PORT: "8530"
+      # Subcaminho no proxy (ex.: https://tool.betoschneider.com/treegen)
+      TREEGEN_ROOT_PATH: "/treegen"
       TREEGEN_REQUEST_TIMEOUT: "2"
       TREEGEN_MAX_BODY_BYTES: "65536"
       TREEGEN_RATE_LIMIT: "120"
